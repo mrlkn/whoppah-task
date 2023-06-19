@@ -14,3 +14,10 @@ STATE_CHOICES = [
     (BANNED, 'Banned'),
     (ACCEPTED, 'Accepted')
 ]
+
+
+TRANSITIONS = {
+    'draft': {'new': 'creator'},
+    'new': {'rejected': 'admin', 'banned': 'admin', 'accepted': 'admin'},
+    'rejected': {'new': 'creator'}
+}

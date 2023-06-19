@@ -2,8 +2,8 @@ from typing import Union
 from rest_framework import serializers
 
 from . import choices
-from .product_state_machine import ProductStateMachine
 from .models import Category, Product
+from .utils import is_valid_transition
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -62,24 +62,22 @@ class ProductSerializer(BaseSerializer):
 
 
 class ProductStateUpdateSerializer(serializers.Serializer):
-    state = serializers.CharField(max_length=16)
+    state = serializers.ChoiceField(choices=choices.STATE_CHOICES)
+
+    def validate_state(self, attrs: str) -> str:
+        user = self.context.get("user")
+        new_state = attrs
+
+        if self.instance.state == new_state:
+            raise serializers.ValidationError("Given state is same as the current state.")
+
+        if not is_valid_transition(self.instance, new_state, user):
+            raise serializers.ValidationError("Can not perform this transition.")
+        return attrs
 
     def update(self, instance: Product, validated_data: dict) -> Product:
         user = self.context.get("user")
         new_state = validated_data.get('state')
-
-        if instance.state == new_state:
-            raise serializers.ValidationError("Product already in the given state.")
-
-        state_machine = ProductStateMachine(instance, user)
-
-        all_triggers = state_machine.machine.events.keys()
-        if new_state not in all_triggers:
-            raise serializers.ValidationError(f"Please provide a valid trigger, available choices: {all_triggers}")
-
-        transition_method = getattr(state_machine, new_state, None)
-        if not transition_method():
-            raise serializers.ValidationError("Invalid state transition.")
 
         instance.state = new_state
         instance.last_updated_by = user
