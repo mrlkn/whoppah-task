@@ -1,7 +1,9 @@
 from celery import Celery
 from django.conf import settings
-
+import os
 app = Celery('whoppah')
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'whoppah.settings')
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 

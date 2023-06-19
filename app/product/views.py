@@ -1,5 +1,3 @@
-# marketplace/views.py
-
 from rest_framework import viewsets, permissions
 
 from . import choices
