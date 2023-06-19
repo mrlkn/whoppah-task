@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 
 from product import choices
+from product.utils import generate_unique_slug
 
 
 class Category(models.Model):
@@ -11,7 +12,7 @@ class Category(models.Model):
     def save(self, *args, **kwargs):
         # Auto-generate slug before saving
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = generate_unique_slug(self, 'title', 'slug')
         super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -27,7 +28,7 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = generate_unique_slug(self, 'title', 'slug')
         super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
