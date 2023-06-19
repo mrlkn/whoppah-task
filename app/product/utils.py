@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User
-from django.utils.text import slugify
-
 from django.db import models
+from django.utils.text import slugify
 
 from . import choices
 
 
-def generate_unique_slug(model_instance: models.Model, slugable_field_name: str, slug_field_name: str) -> str:
+def generate_unique_slug(
+    model_instance: models.Model, slugable_field_name: str, slug_field_name: str
+) -> str:
     """
     Generate a unique slug for a given model instance.
 
