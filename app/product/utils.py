@@ -1,10 +1,9 @@
-# product/models.py
-
-import uuid
-
+from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 from django.db import models
+
+from . import choices
 
 
 def generate_unique_slug(model_instance: models.Model, slugable_field_name: str, slug_field_name: str) -> str:
@@ -33,3 +32,14 @@ def generate_unique_slug(model_instance: models.Model, slugable_field_name: str,
 
     return unique_slug
 
+
+def is_valid_transition(instance, new_state: str, user: User) -> bool:
+    user_role = []
+    if user.is_staff:
+        user_role.append("admin")
+    if instance.created_by == user:
+        user_role.append("creator")
+
+    allowed_transition = choices.TRANSITIONS.get(instance.state, {}).get(new_state)
+
+    return allowed_transition in user_role
