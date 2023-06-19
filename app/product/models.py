@@ -26,8 +26,7 @@ class Category(AuditableModel):
     slug = models.SlugField(blank=True, max_length=200)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = generate_unique_slug(self, 'title', 'slug')
+        self.slug = generate_unique_slug(self, 'title', 'slug')
         super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -43,8 +42,7 @@ class Product(AuditableModel):
     state = models.CharField(max_length=10, choices=choices.STATE_CHOICES, default=choices.DRAFT, db_index=True)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = generate_unique_slug(self, 'title', 'slug')
+        self.slug = generate_unique_slug(self, 'title', 'slug')
         super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
