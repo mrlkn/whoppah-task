@@ -4,7 +4,7 @@ from requests import ReadTimeout
 
 
 @shared_task(bind=True, autoretry_for=(Exception, ConnectionError, ReadTimeout, ), retry_backoff=True, retry_kwargs={'max_retries': 10})
-def send_email_task(recipient_email: str, subject: str, message: str) -> None:
+def send_email_task(self, recipient_email: str, subject: str, message: str) -> None:
     """
     Send an email asynchronously using Celery with automatic retries in case of failure.
 

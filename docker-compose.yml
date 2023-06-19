@@ -7,9 +7,15 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env
+    networks:
+      - backend
 
   redis:
     image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
 
   whoppah_app:
     build:
@@ -24,6 +30,13 @@ services:
       - redis
     env_file:
       - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=whoppah.settings
+    networks:
+      - backend
 
 volumes:
   postgres_data:
+
+networks:
+  backend:
