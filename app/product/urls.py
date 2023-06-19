@@ -8,4 +8,10 @@ router.register(r'products', ProductViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('products/<uuid:pk>/update_state/', ProductViewSet.as_view({
+        'put': 'update_product_state'
+    }),
+         name='update-product-state'
+         ),
+
 ]

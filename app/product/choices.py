@@ -4,6 +4,9 @@ REJECTED = 'rejected'
 BANNED = 'banned'
 ACCEPTED = 'accepted'
 
+STATES = [DRAFT, NEW, REJECTED, BANNED, ACCEPTED]
+
+
 STATE_CHOICES = [
     (DRAFT, 'Draft'),
     (NEW, 'New'),
