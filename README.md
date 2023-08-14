@@ -1,7 +1,7 @@
 # Whoppah Second Hand Market 
 
 
-## Table of Contents
+## Table of Contents ->
 
 1. [Installation and Setup](#installation-and-setup)
 2. [Models](#Models)
